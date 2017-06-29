@@ -1,13 +1,20 @@
-params ["_veh"];
+params ["_gun", "_type"];
+_classname = (typeOf _gun) select [7,count (typeOf _gun)];
+_ammo = (getarray(configfile >> "CfgWeapons" >> _classname >> "Magazines") select 0);
 
 _clientOwnerId = remoteExecutedOwner;
 _clientObject = [_clientOwnerId]call sync_fnc_getOwnerObject;
 
 if (!simulationEnabled cursorObject) exitWith {[_clientOwnerId, "Something went wrong! #1"]call sync_fnc_hint};
-if (isNil {_veh getVariable "buyable"}) exitWith {[_clientOwnerId, "Something went wrong! #2"]call sync_fnc_hint};
-if (_clientObject distance _veh > 5) exitWith {[_clientOwnerId, ("Something went wrong! #3 " + str (_clientObject distance _veh))]call sync_fnc_hint};
+if (isNil {_gun getVariable "buyable"}) exitWith {[_clientOwnerId, "Something went wrong! #2"]call sync_fnc_hint};
+if (_clientObject distance _gun > 5) exitWith {[_clientOwnerId, ("Something went wrong! #3 " + str (_clientObject distance _gun))]call sync_fnc_hint};
 
-_price = getNumber (missionConfigFile >>  "CfgPrices" >> "Vehicles" >> typeOf _veh >> "price");
+_price = 0;
+if (_type == "ammo") then {
+    _price = getNumber (missionConfigFile >>  "CfgPrices" >> "Weapons" >> typeOf _gun >> "ammoPrice");
+} else {
+    _price = getNumber (missionConfigFile >>  "CfgPrices" >> "Weapons" >> typeOf _gun >> "price");
+};
 
 if (_price == 0) exitWith {[_clientOwnerId, "Price was not defined! #4"]call sync_fnc_hint};
 
@@ -21,11 +28,11 @@ if (_money < _price) exitWith {[_clientOwnerId, "You cant afford that!"]call syn
 ["write", ["stats", "Cash", _money - _price]] call _inidbi;
 [missionNamespace, ["Cash", _money - _price]] remoteExecCall ["setVariable", _clientOwnerId];
 
-_veh = createVehicle [typeOf _veh, (getMarkerPos "vehicleSpawn1"), [], 0, "NONE"];
-_veh allowDamage false;
-_veh setPos (getMarkerPos "vehicleSpawn1");
-_veh setVectorUp (surfaceNormal (getMarkerPos "vehicleSpawn1"));
-_veh setDir (markerDir "vehicleSpawn1");
-/*_veh lock 2;*/
+if (_type == "ammo") then {
+    _clientObject addMagazine _ammo;
+} else {
+    _clientObject addMagazine _ammo;
+    _clientObject addWeapon _classname;
+};
 
 [_clientOwnerId, "purchase was sucessfull!"]call sync_fnc_hint;
