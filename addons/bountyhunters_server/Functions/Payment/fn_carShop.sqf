@@ -17,7 +17,8 @@ _money = ["read", ["stats", "Cash", "NOTFOUND"]] call _inidbi;
 if ((str _money) == "NOTFOUND") exitWith {[_clientOwnerId, "Could not get Player's Money! #5"]call sync_fnc_hint};
 if ((typeName _money) != "SCALAR") exitWith {[_clientOwnerId, "Wrong value Type! #6"]call sync_fnc_hint};
 if (_money < _price) exitWith {[_clientOwnerId, "You cant afford that!"]call sync_fnc_hint};
-
+_check = (getMarkerPos "vehicleSpawn1") nearEntities [["Car"], 3];
+if!(_check isequalto []) exitwith {[_clientOwnerId, "Car Blocking Spawn!"] call sync_fnc_hint};
 ["write", ["stats", "Cash", _money - _price]] call _inidbi;
 [missionNamespace, ["Cash", _money - _price]] remoteExecCall ["setVariable", _clientOwnerId];
 
