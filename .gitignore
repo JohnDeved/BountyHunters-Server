@@ -1,1 +1,4 @@
-addons\*.pbo
+.\addons\bountyhunters_server.pbo
+bountyhunters_server.pbo
+.\addons\*.pbo
+*.pbo

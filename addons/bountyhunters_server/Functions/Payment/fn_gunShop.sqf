@@ -1,7 +1,8 @@
 params ["_obj", "_type"];
 _item = "";
 if (_type == "ammo") then {
-    _item = (getarray(configfile >> "CfgWeapons" >> (typeOf _obj) >> "Magazines") select 0);
+    _item = (typeOf _obj) select [((typeOf _obj) find "_") + 1, count (typeOf _obj)];
+    _item = (getarray(configfile >> "CfgWeapons" >> _item >> "Magazines") select 0);
 };
 if (_type == "weapon") then {
     _item = (typeOf _obj) select [((typeOf _obj) find "_") + 1, count (typeOf _obj)];
@@ -40,9 +41,6 @@ if (_money < _price) exitWith {[_clientOwnerId, "You cant afford that!"]call syn
 ["write", ["stats", "Cash", _money - _price]] call _inidbi;
 [missionNamespace, ["Cash", _money - _price]] remoteExecCall ["setVariable", _clientOwnerId];
 
-diag_log _item;
-
 _clientObject addItem _item;
-_clientObject assignItem _item;
 
 [_clientOwnerId, "purchase was sucessfull!"]call sync_fnc_hint;
