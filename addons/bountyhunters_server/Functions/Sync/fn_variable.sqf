@@ -8,13 +8,16 @@ _inidbi = ["new", getPlayerUID _clientObject] call OO_INIDBI;
 {
     _varName = (configName _x);
     if (_varName in _vars) then {
-        _val = ["read", ["stats", _varName, "NOTFOUND"]] call _inidbi;
-        if ((str _val) != "NOTFOUND") then {
+        _random = str random 1;
+        _val = ["read", ["stats", _varName, ("_NOTFOUND_" + _random)]] call _inidbi;
+        if !(_val isEqualTo ("_NOTFOUND_" + _random)) then {
             [missionNamespace, [_varName, _val]] remoteExecCall ["setVariable", _clientOwnerId];
         } else {
             _val = [_varName] call sync_fnc_getDefaultValue;
-            ["write", ["stats", _varName, _val]] call _inidbi;
-            [missionNamespace, [_varName, _val]] remoteExecCall ["setVariable", _clientOwnerId];
+            if !(_val isEqualTo 0) exitWith {
+                ["write", ["stats", _varName, _val]] call _inidbi;
+                [missionNamespace, [_varName, _val]] remoteExecCall ["setVariable", _clientOwnerId];
+            };
         };
     };
 } forEach ("true" configClasses (missionConfigFile >> "CfgVariables" >> "Sync"));
