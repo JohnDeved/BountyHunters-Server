@@ -24,6 +24,7 @@ class CfgFunctions
             class getOwnerObject {};
             class getDefaultValue {};
             class hint {};
+            class saveGear {};
         };
     };
     class Payment_Functions
