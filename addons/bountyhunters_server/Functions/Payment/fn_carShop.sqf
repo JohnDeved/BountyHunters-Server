@@ -23,7 +23,6 @@ if !((nearestObjects[(getMarkerPos "vehicleSpawn1"),["Car","Ship","Air"],5]) isE
 [missionNamespace, ["Cash", _money - _price]] remoteExecCall ["setVariable", _clientOwnerId];
 
 _veh = createVehicle [typeOf _veh, (getMarkerPos "vehicleSpawn1"), [], 0, "NONE"];
-_veh allowDamage false;
 _veh setPos (getMarkerPos "vehicleSpawn1");
 _veh setVectorUp (surfaceNormal (getMarkerPos "vehicleSpawn1"));
 _veh setDir (markerDir "vehicleSpawn1");
