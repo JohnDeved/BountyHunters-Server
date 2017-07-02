@@ -36,4 +36,14 @@ class CfgFunctions
             class gunShop {};
         };
     };
+    class Farming_Functions
+    {
+        tag = "farming";
+        class Farming
+        {
+            file = "\bountyhunters_server\Functions\Farming";
+            class updatePlant {};
+            class harvestPlant {};
+        };
+    };
 };
