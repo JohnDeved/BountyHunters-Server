@@ -46,4 +46,13 @@ class CfgFunctions
             class harvestPlant {};
         };
     };
+    class Misc_Functions
+    {
+        tag = "misc";
+        class Misc
+        {
+            file = "\bountyhunters_server\Functions\Misc";
+            class init {};
+        };
+    };
 };
