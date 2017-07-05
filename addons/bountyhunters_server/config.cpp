@@ -55,6 +55,7 @@ class CfgFunctions
             file = "\bountyhunters_server\Functions\Misc";
             class init {};
             class findItem {};
+            class getPlayerTotalWeigth {};
         };
     };
 };
