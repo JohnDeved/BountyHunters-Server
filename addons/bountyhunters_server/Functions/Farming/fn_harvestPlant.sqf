@@ -17,7 +17,6 @@ if ((str _plant) find ": b_" != -1) then {
     if (_maxItems == 0) exitWith {[_clientOwnerId, "maxitems was not defined! #7"]call sync_fnc_hint};
 
     _harvest = getText (missionConfigFile >> "CfgPlants" >> "Bushes" >> _className >> "harvest");
-    diag_log _harvest;
     _itemCount = round ((random (_maxItems - 1)) + 1);
     _weigth = getNumber (missionConfigFile >> "CfgPlants" >> "Bushes" >> _className >> "weigth");
     _weigth = _weigth * _itemCount;
@@ -35,9 +34,7 @@ if ((str _plant) find ": b_" != -1) then {
     if (_carryWeigth isEqualTo 0) exitWith {[_clientOwnerId, "Carry weigth was not defined! #9"]call sync_fnc_hint};
     if (_carryWeigth < (_currentWeigth + _weigth)) exitWith {[_clientOwnerId, "You dont have enought room!"]call sync_fnc_hint};
 
-    diag_log _harvest;
     _return = [_harvest, _items] call misc_fnc_findItem;
-    diag_log _harvest;
     if (_return isEqualTo []) then {
         _items pushBack [_harvest, _itemCount];
         ["write", ["stats", "vItems", _items]] call _inidbi;
@@ -53,7 +50,6 @@ if ((str _plant) find ": b_" != -1) then {
         [missionNamespace, ["vItems", _items]] remoteExecCall ["setVariable", _clientOwnerId];
     };
 
-    diag_log _harvest;
     [_clientOwnerId, "You harvested " + str _itemCount + " " + _harvest]call sync_fnc_hint;
     _plant setDamage 1;
     varTower setVariable [str _plant, (_time + _respawnTime), true];

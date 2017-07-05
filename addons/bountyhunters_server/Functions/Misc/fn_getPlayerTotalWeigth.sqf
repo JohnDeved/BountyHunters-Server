@@ -8,8 +8,8 @@ _totalWeigth = 0;
     _count = _x select 1;
     _className = "";
     {
-        _harvest = getText (_x >> "harvest");
-        if (_harvest isEqualTo _item) then {
+        _harvest2 = getText (_x >> "harvest");
+        if (_harvest2 isEqualTo _item) then {
             _className = configName _x;
         };
     } forEach ("true" configClasses (missionConfigFile >> "CfgPlants" >> "Bushes"));
