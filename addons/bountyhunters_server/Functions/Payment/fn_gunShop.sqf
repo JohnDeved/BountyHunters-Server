@@ -27,14 +27,14 @@ if (_type == "weapon") then {
     _price = getNumber (missionConfigFile >>  "CfgPrices" >> "Weapons" >> typeOf _obj >> "price");
 };
 if (_type == "attatchment") then {
-    _price = getNumber (missionConfigFile >>  "CfgPrices" >> "WeaponAttatchments" >> typeOf _obj >> "price");
+    _price = getNumber (missionConfigFile >>  "CfgPrices" >> "Attatchments" >> typeOf _obj >> "price");
 };
 if (_price == 0) exitWith {[_clientOwnerId, "Price was not defined! #4"]call sync_fnc_hint};
 
 _inidbi = ["new", getPlayerUID _clientObject] call OO_INIDBI;
 _money = ["read", ["stats", "Cash", "NOTFOUND"]] call _inidbi;
 
-if ((str _money) == "NOTFOUND") exitWith {[_clientOwnerId, "Could not get Player's Money! #5"]call sync_fnc_hint};
+if (_money isEqualTo "NOTFOUND") exitWith {[_clientOwnerId, "Could not get Player's Money! #5"]call sync_fnc_hint};
 if ((typeName _money) != "SCALAR") exitWith {[_clientOwnerId, "Wrong value Type! #6"]call sync_fnc_hint};
 if (_money < _price) exitWith {[_clientOwnerId, "You cant afford that!"]call sync_fnc_hint};
 

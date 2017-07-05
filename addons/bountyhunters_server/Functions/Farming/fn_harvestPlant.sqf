@@ -15,12 +15,40 @@ if ((str _plant) find ": b_" != -1) then {
     _maxItems = getNumber (missionConfigFile >> "CfgPlants" >> "Bushes" >> _className >> "maxitems");
     if (_maxItems == 0) exitWith {[_clientOwnerId, "maxitems was not defined! #7"]call sync_fnc_hint};
 
+    _harvest = getText (missionConfigFile >> "CfgPlants" >> "Bushes" >> _className >> "harvest");
+    _itemCount = round ((random (_maxItems - 1)) + 1);
 
+    _inidbi = ["new", getPlayerUID _clientObject] call OO_INIDBI;
+    _items = ["read", ["stats", "vItems", "NOTFOUND"]] call _inidbi;
+    if (_items isEqualTo "NOTFOUND") exitWith {[_clientOwnerId, "Something went wrong! #8"]call sync_fnc_hint};
+
+    _backpack = backpack _clientObject;
+    if (_backpack isEqualTo "") exitWith {[_clientOwnerId, "You cant carry this without a Backpack!"]call sync_fnc_hint};
+
+    _carryWeigth = getNumber (missionConfigFile >> "CfgClothing" >> "Backpacks" >> _backpack >> "carryweigth");
+    if (_carryWeigth isEqualTo 0) exitWith {[_clientOwnerId, "Carry weigth was not defined! #9"]call sync_fnc_hint};
+
+    _return = [_harvest, _items] call misc_fnc_findItem;
+    diag_log _return;
+    if (_return isEqualTo []) then {
+        _items pushBack [_harvest, _itemCount];
+        ["write", ["stats", "vItems", _items]] call _inidbi;
+        [missionNamespace, ["vItems", _items]] remoteExecCall ["setVariable", _clientOwnerId];
+    } else {
+        _vitemArr = _return select 0;
+        _index = _return select 1;
+        _vitem = _vitemArr select 0;
+        _vitemCount = _vitemArr select 1;
+        _vitemCount = _itemCount + _vitemCount;
+        _items set [_index, [_harvest, _vitemCount]];
+        ["write", ["stats", "vItems", _items]] call _inidbi;
+        [missionNamespace, ["vItems", _items]] remoteExecCall ["setVariable", _clientOwnerId];
+    };
+
+    [_clientOwnerId, "You harvested " + str _itemCount + " " + _harvest]call sync_fnc_hint;
     _plant setDamage 1;
     varTower setVariable [str _plant, (_time + _respawnTime), true];
 
-    _itemCount = round ((random (_maxItems - 1)) + 1);
-    [_clientOwnerId, "You harvested " + str _itemCount + " X"]call sync_fnc_hint;
     [_clientObject, "AmovPercMstpSnonWnonDnon_AinvPercMstpSnonWnonDnon_Putdown"] remoteExecCall ["playmove", _clientOwnerId];
 };
 if ((str _plant) find ": t_" != -1) then {
