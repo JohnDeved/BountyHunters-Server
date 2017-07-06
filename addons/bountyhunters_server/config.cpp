@@ -45,6 +45,8 @@ class CfgFunctions
             file = "\bountyhunters_server\Functions\Farming";
             class updatePlant {};
             class harvestPlant {};
+            class addVirtualItem {};
+            class processing {};
         };
     };
     class Misc_Functions
