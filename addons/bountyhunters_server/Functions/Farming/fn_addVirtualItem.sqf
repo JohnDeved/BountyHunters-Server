@@ -1,8 +1,7 @@
-params ["_config", "_ammount"];
-_vItemVar = getText (_config >> "variable");
-_weigth = getNumber (_config >> "weigth");
-if (_vItemVar isEqualTo "") exitWith {[_clientOwnerId, "Item Variable was not Defined! " + str _config]call sync_fnc_hint; false};
-if (_weigth isEqualTo 0) exitWith {[_clientOwnerId, "Item Variable was not Defined! " + str _config]call sync_fnc_hint; false};
+params ["_vItemVar", "_ammount"];
+_weigth = getNumber (missionConfigFile >> "CfgvItems" >> _vItemVar >> "weigth");
+if (_vItemVar isEqualTo "") exitWith {[_clientOwnerId, "Item Variable was not Defined! " + _vItemVar]call sync_fnc_hint; false};
+if (_weigth isEqualTo 0) exitWith {[_clientOwnerId, "Item Variable was not Defined! " + _vItemVar]call sync_fnc_hint; false};
 _weigth = _weigth * _ammount;
 
 _inidbi = ["new", getPlayerUID _clientObject] call OO_INIDBI;

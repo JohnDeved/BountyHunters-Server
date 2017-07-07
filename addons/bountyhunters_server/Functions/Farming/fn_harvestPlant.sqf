@@ -17,10 +17,11 @@ if ((str _plant) find ": b_" != -1) then {
 
     _itemCount = round ((random (_maxItems - 1)) + 1);
 
-    _done = [(missionConfigFile >> "CfgPlants" >> _className), _itemCount] call farming_fnc_addVirtualItem;
+    _harvest = getText (missionConfigFile >> "CfgPlants" >> _className >> "harvest");
+
+    _done = [_harvest, _itemCount] call farming_fnc_addVirtualItem;
     if !(_done) exitWith {};
 
-    _harvest = getText (missionConfigFile >> "CfgPlants" >> _className >> "harvest");
     [_clientOwnerId, "You harvested " + str _itemCount + " " + _harvest]call sync_fnc_hint;
     _plant setDamage 1;
     varTower setVariable [str _plant, (_time + _respawnTime), true];
