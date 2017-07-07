@@ -1,14 +1,17 @@
 params ["_obj", "_type"];
 _item = "";
-if (_type == "ammo") then {
-    _item = (typeOf _obj) select [((typeOf _obj) find "_") + 1, count (typeOf _obj)];
-    _item = (getarray(configfile >> "CfgWeapons" >> _item >> "Magazines") select 0);
-};
-if (_type == "weapon") then {
-    _item = (typeOf _obj) select [((typeOf _obj) find "_") + 1, count (typeOf _obj)];
-};
-if (_type == "attatchment") then {
-    _item = (typeOf _obj) select [((typeOf _obj) find "_") + 1, count (typeOf _obj)];
+switch (_type) do {
+    case ("ammo"): {
+        _item = (typeOf _obj) select [((typeOf _obj) find "_") + 1, count (typeOf _obj)];
+        _item = (getarray(configfile >> "CfgWeapons" >> _item >> "Magazines") select 0);
+    };
+    case ("weapon"): {
+        _item = (typeOf _obj) select [((typeOf _obj) find "_") + 1, count (typeOf _obj)];
+    };
+    case ("attatchment"): {
+        _item = (typeOf _obj) select [((typeOf _obj) find "_") + 1, count (typeOf _obj)];
+    };
+    default {};
 };
 
 _clientOwnerId = remoteExecutedOwner;
@@ -20,14 +23,18 @@ if (_clientObject distance _obj > 5) exitWith {[_clientOwnerId, ("Something went
 if !(_clientObject canAdd  _item) exitWith {[_clientOwnerId, "you dont have enough room to carry this!"]call sync_fnc_hint};
 
 _price = 0;
-if (_type == "ammo") then {
-    _price = getNumber (missionConfigFile >>  "CfgPrices" >> "Weapons" >> typeOf _obj >> "ammoPrice");
-};
-if (_type == "weapon") then {
-    _price = getNumber (missionConfigFile >>  "CfgPrices" >> "Weapons" >> typeOf _obj >> "price");
-};
-if (_type == "attatchment") then {
-    _price = getNumber (missionConfigFile >>  "CfgPrices" >> "Attatchments" >> typeOf _obj >> "price");
+
+switch (_type) do {
+    case ("ammo"): {
+        _price = getNumber (missionConfigFile >>  "CfgPrices" >> "Weapons" >> typeOf _obj >> "ammoPrice");
+    };
+    case ("weapon"): {
+        _price = getNumber (missionConfigFile >>  "CfgPrices" >> "Weapons" >> typeOf _obj >> "price");
+    };
+    case ("attatchment"): {
+        _price = getNumber (missionConfigFile >>  "CfgPrices" >> "Attatchments" >> typeOf _obj >> "price");
+    };
+    default {};
 };
 if (_price == 0) exitWith {[_clientOwnerId, "Price was not defined! #4"]call sync_fnc_hint};
 
