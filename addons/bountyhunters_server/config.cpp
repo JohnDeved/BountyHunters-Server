@@ -58,6 +58,7 @@ class CfgFunctions
             class init {};
             class findItem {};
             class getPlayerTotalWeigth {};
+            class getPlayerItems {};
         };
     };
 };
