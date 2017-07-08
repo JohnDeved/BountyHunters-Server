@@ -42,7 +42,7 @@ if (_itemReturn2 isEqualTo []) then {
     _items pushBack [_vItemVar, _returnAmmount];
 } else {
     _itemIndex2 = _itemReturn2 select 1;
-    _items set [_itemIndex2, _returnAmmount];
+    _items set [_itemIndex2, [_vItemVar, _returnAmmount]];
 };
 
 [_clientOwnerId, ("You Processed " + str (_inputItemAmmount - _inputLeftovers) + " into " + str _returnAmmount + " " + _vItemVar + "!")]call sync_fnc_hint;
