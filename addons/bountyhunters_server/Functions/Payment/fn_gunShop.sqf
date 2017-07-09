@@ -11,6 +11,12 @@ switch (_type) do {
     case ("attatchment"): {
         _item = (typeOf _obj) select [((typeOf _obj) find "_") + 1, count (typeOf _obj)];
     };
+    case ("clothing"): {
+        _item = (typeOf _obj) select [((typeOf _obj) find "_") + 1, count (typeOf _obj)];
+    };
+    case ("headgear"): {
+        _item = (typeOf _obj) select [((typeOf _obj) find "_") + 1, count (typeOf _obj)];
+    };
     default {};
 };
 
@@ -33,6 +39,12 @@ switch (_type) do {
     };
     case ("attatchment"): {
         _price = getNumber (missionConfigFile >>  "CfgPrices" >> "Attatchments" >> typeOf _obj >> "price");
+    };
+    case ("clothing"): {
+        _price = getNumber (missionConfigFile >>  "CfgPrices" >> "Clothing" >> typeOf _obj >> "price");
+    };
+    case ("headgear"): {
+        _price = getNumber (missionConfigFile >>  "CfgPrices" >> "HeadGear" >> typeOf _obj >> "price");
     };
     default {};
 };
