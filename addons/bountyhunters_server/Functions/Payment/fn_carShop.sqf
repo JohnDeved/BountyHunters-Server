@@ -11,8 +11,8 @@ _price = getNumber (missionConfigFile >>  "CfgPrices" >> "Vehicles" >> typeOf _v
 
 if (_price == 0) exitWith {[_clientOwnerId, "Price was not defined! #4"]call sync_fnc_hint};
 
-_inidbi = ["new", getPlayerUID _clientObject] call OO_INIDBI;
-_money = ["read", ["stats", "Cash", "NOTFOUND"]] call _inidbi;
+_money = [_clientObject] call stats_fnc_getCash;
+if ((typeName _money) != "SCALAR") exitWith {[_clientOwnerId, (str _money)]call sync_fnc_hint};
 
 if ((str _money) == "NOTFOUND") exitWith {[_clientOwnerId, "Could not get Player's Money! #5"]call sync_fnc_hint};
 if ((typeName _money) != "SCALAR") exitWith {[_clientOwnerId, "Wrong value Type! #6"]call sync_fnc_hint};
@@ -27,8 +27,7 @@ if !((nearestObjects[(getMarkerPos "vehicleSpawn1"),["Car","Ship","Air"],5]) isE
 
 if (_pos isEqualTo []) exitWith {[_clientOwnerId, "Something is blocking Spawn!"]call sync_fnc_hint};
 
-["write", ["stats", "Cash", _money - _price]] call _inidbi;
-[missionNamespace, ["Cash", _money - _price]] remoteExecCall ["setVariable", _clientOwnerId];
+[_clientObject, _price] call stats_fnc_removeCash;
 
 _veh = createVehicle [typeOf _veh, (getMarkerPos "vehicleSpawn1"), [], 0, "NONE"];
 _veh setPos _pos;
