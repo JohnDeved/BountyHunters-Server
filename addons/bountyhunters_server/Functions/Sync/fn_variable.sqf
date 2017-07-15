@@ -30,6 +30,10 @@ _inidbi = ["new", getPlayerUID _clientObject] call OO_INIDBI;
                         ["write", ["stats", _varName, _val]] call _inidbi;
                         [missionNamespace, [_varName, _val]] remoteExecCall ["setVariable", _clientOwnerId];
                     };
+                    case ("vItems"): {
+                        ["write", ["stats", _varName, []]] call _inidbi;
+                        [missionNamespace, [_varName, []]] remoteExecCall ["setVariable", _clientOwnerId];
+                    };
                     default {
                         ["write", ["stats", _varName, _val]] call _inidbi;
                         [missionNamespace, [_varName, _val]] remoteExecCall ["setVariable", _clientOwnerId];
