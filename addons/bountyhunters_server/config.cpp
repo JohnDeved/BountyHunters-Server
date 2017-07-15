@@ -61,4 +61,32 @@ class CfgFunctions
             class getPlayerItems {};
         };
     };
+    class Stats
+    {
+        tag = "stats";
+        class Add
+        {
+            file = "\bountyhunters_server\Functions\Stats\Add";
+            class addCash {};
+            class addVirtualItems {};
+        };
+        class Get
+        {
+            file = "\bountyhunters_server\Functions\Stats\Get";
+            class getCash {};
+            class getVirtualItems {};
+        };
+        class Remove
+        {
+            file = "\bountyhunters_server\Functions\Stats\Remove";
+            class removeCash {};
+            class removeVirtualItems {};
+        };
+        class Set
+        {
+            file = "\bountyhunters_server\Functions\Stats\Set";
+            class setCash {};
+            class setVirtualItems {};
+        };
+    };
 };
