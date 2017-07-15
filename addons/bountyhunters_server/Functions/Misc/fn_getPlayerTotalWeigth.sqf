@@ -1,7 +1,12 @@
 params ["_items", "_backpack"];
 
 _return = [];
-_maxWeigth = getNumber (missionConfigFile >> "CfgClothing" >> "Backpacks" >> _backpack >> "carryweigth");
+_maxWeigth = 0;
+if !(_backpack isEqualTo "") then {
+    _maxWeigth = getNumber (missionConfigFile >> "CfgClothing" >> _backpack >> "carryweigth");
+} else {
+    _maxWeigth = getNumber (missionConfigFile >> "CfgClothing" >> "None" >> "carryweigth");
+};
 _totalWeigth = 0;
 {
     _item = _x select 0;
