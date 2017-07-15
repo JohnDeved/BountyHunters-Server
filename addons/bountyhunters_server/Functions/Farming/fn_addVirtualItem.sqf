@@ -9,13 +9,10 @@ _items = ["read", ["stats", "vItems", "NOTFOUND"]] call _inidbi;
 if (_items isEqualTo "NOTFOUND") exitWith {[_clientOwnerId, "Something went wrong! #8"]call sync_fnc_hint; false};
 
 _backpack = backpack _clientObject;
-if (_backpack isEqualTo "") exitWith {[_clientOwnerId, "You cant carry this without a Backpack!"]call sync_fnc_hint; false};
-
 _weigths = [_items, _backpack] call misc_fnc_getPlayerTotalWeigth;
-_currentWeigth = _weigths select 0;
-_carryWeigth = _weigths select 1;
-if (_carryWeigth isEqualTo 0) exitWith {[_clientOwnerId, "Carry weigth was not defined! #9"]call sync_fnc_hint; false};
-if (_carryWeigth < (_currentWeigth + _weigth)) exitWith {[_clientOwnerId, "You dont have enought room!"]call sync_fnc_hint; false};
+_weigths params ["_currentWeigth", "_maxWeigth"];
+if (_maxWeigth isEqualTo 0) exitWith {[_clientOwnerId, "Carry weigth was not defined! #9"]call sync_fnc_hint; false};
+if (_maxWeigth < (_currentWeigth + _weigth)) exitWith {[_clientOwnerId, "You dont have enought room!"]call sync_fnc_hint; false};
 
 _return = [_vItemVar, _items] call misc_fnc_findItem;
 if (_return isEqualTo []) then {
