@@ -1,4 +1,5 @@
 params ["_processorObj"];
+private ["_itemReturn", "_itemIndex"];
 
 _clientOwnerId = remoteExecutedOwner;
 _clientObject = [_clientOwnerId]call sync_fnc_getOwnerObject;
@@ -37,12 +38,12 @@ _itemIndex = _itemReturn select 1;
 
 _items set [_itemIndex, [_inputItem, _inputLeftovers]];
 
-_itemReturn2 = [_vItemVar, _items] call misc_fnc_findItem;
-if (_itemReturn2 isEqualTo []) then {
+_itemReturn = [_vItemVar, _items] call misc_fnc_findItem;
+if (_itemReturn isEqualTo []) then {
     _items pushBack [_vItemVar, _returnAmmount];
 } else {
-    _itemIndex2 = _itemReturn2 select 1;
-    _items set [_itemIndex2, [_vItemVar, _returnAmmount]];
+    _itemIndex = _itemReturn select 1;
+    _items set [_itemIndex, [_vItemVar, _returnAmmount]];
 };
 
 [_clientOwnerId, ("You Processed " + str (_inputItemAmmount - _inputLeftovers) + " into " + str _returnAmmount + " " + _vItemVar + "!")]call sync_fnc_hint;
