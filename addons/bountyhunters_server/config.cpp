@@ -89,4 +89,23 @@ class CfgFunctions
             class setVirtualItems {};
         };
     };
+    class ServerEventHandler
+    {
+        tag = "serverevent";
+        class ServerEvent
+        {
+            file = "\bountyhunters_server\Functions\ServerEventHandler";
+            class onPlayerDisconnected {};
+            class onServerLoop {};
+        };
+    };
+    class ServerLoop
+    {
+        tag = "serverloop";
+        class ServerLoop
+        {
+            file = "\bountyhunters_server\Functions\ServerLoop";
+            class syncServerTime {};
+        };
+    };
 };
