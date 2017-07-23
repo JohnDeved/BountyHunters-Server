@@ -48,11 +48,20 @@ drawDirections = {
 
         _roads = roadsConnectedTo _road;
         _roads = _roads - _checked;
-        _queue append (_roads apply {[(_x distance2D _goal) * (count ([] + _path)), [_x, [] + _path]]});
-        _queue sort true;
-        _next = _queue deleteAt 0;
-        systemchat (str (count _checked) + ":" + str (count _roads) + " processed in " + str (time - _time) + "sec");
-        (_next select 1) call _processRoad;
+        switch (count _roads) do {
+            case (1): {(_roads + [[] + _path]) call _processRoad};
+            case (0): {
+                _next = _queue deleteAt 0;
+                (_next select 1) call _processRoad;
+            };
+            default {
+                _queue append (_roads apply {[(_x distance2D _goal) * (count ([] + _path)), [_x, [] + _path]]});
+                _queue sort true;
+                _next = _queue deleteAt 0;
+                systemchat (str (count _checked) + ":" + str (count _roads) + " processed in " + str (time - _time) + "sec");
+                (_next select 1) call _processRoad;
+            };
+        };
     };
 
     _start call _processRoad;
