@@ -7,6 +7,7 @@ publicVariable "varTower";
 serverStart = "real_date" callExtension "0";
 publicVariable "serverStart";
 
+onPlayerConnected serverevent_fnc_onPlayerConnected;
 onPlayerDisconnected serverevent_fnc_onPlayerDisconnected;
 
 while {true} do serverevent_fnc_onServerLoop;
