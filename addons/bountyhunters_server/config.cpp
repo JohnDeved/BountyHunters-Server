@@ -45,6 +45,8 @@ class CfgFunctions
             file = "\bountyhunters_server\Functions\Farming";
             class updatePlant {};
             class harvestPlant {};
+            class addVirtualItem {};
+            class processing {};
         };
     };
     class Misc_Functions
@@ -55,6 +57,55 @@ class CfgFunctions
             file = "\bountyhunters_server\Functions\Misc";
             class init {};
             class findItem {};
+            class getPlayerTotalWeigth {};
+            class getPlayerItems {};
+        };
+    };
+    class Stats
+    {
+        tag = "stats";
+        class Add
+        {
+            file = "\bountyhunters_server\Functions\Stats\Add";
+            class addCash {};
+            class addVirtualItems {};
+        };
+        class Get
+        {
+            file = "\bountyhunters_server\Functions\Stats\Get";
+            class getCash {};
+            class getVirtualItems {};
+        };
+        class Remove
+        {
+            file = "\bountyhunters_server\Functions\Stats\Remove";
+            class removeCash {};
+            class removeVirtualItems {};
+        };
+        class Set
+        {
+            file = "\bountyhunters_server\Functions\Stats\Set";
+            class setCash {};
+            class setVirtualItems {};
+        };
+    };
+    class ServerEventHandler
+    {
+        tag = "serverevent";
+        class ServerEvent
+        {
+            file = "\bountyhunters_server\Functions\ServerEventHandler";
+            class onPlayerDisconnected {};
+            class onServerLoop {};
+        };
+    };
+    class ServerLoop
+    {
+        tag = "serverloop";
+        class ServerLoop
+        {
+            file = "\bountyhunters_server\Functions\ServerLoop";
+            class syncServerTime {};
         };
     };
 };

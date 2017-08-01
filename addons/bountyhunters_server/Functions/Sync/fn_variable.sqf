@@ -16,9 +16,6 @@ _inidbi = ["new", getPlayerUID _clientObject] call OO_INIDBI;
                     _clientObject setUnitLoadout _val;
                     [missionNamespace, [_varName, _val]] remoteExecCall ["setVariable", _clientOwnerId];
                 };
-                case ("vItems"): {
-                    [missionNamespace, [_varName, _val]] remoteExecCall ["setVariable", _clientOwnerId];
-                };
                 default {
                     [missionNamespace, [_varName, _val]] remoteExecCall ["setVariable", _clientOwnerId];
                 };
