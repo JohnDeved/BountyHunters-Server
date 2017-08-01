@@ -95,6 +95,7 @@ class CfgFunctions
         class ServerEvent
         {
             file = "\bountyhunters_server\Functions\ServerEventHandler";
+            class onPlayerConnected {};
             class onPlayerDisconnected {};
             class onServerLoop {};
         };
