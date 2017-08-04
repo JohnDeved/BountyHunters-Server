@@ -4,13 +4,13 @@ drawDirections = {
     _startTime = time;
     _checked = [];
     _queue = [];
-    _found = false;
+    _deadEnds = [];
     if (_goal isEqualTo objNull || _start isEqualTo objNull) exitWith {
         systemchat "goal or start not on road!";
     };
 
     _createMarker = {
-        params ["_obj", ["_color", "ColorGrey"]];
+        params ["_obj", ["_color", "ColorWhite"]];
         _marker = createMarkerLocal [str _obj, getpos _obj];
         _marker setMarkerShapeLocal "ICON";
         _marker setMarkerTypeLocal "mil_dot_noShadow";
@@ -23,7 +23,6 @@ drawDirections = {
         params ["_road", ["_path", []]];
 
         systemchat ("found goal in " + str (time - _startTime) + "sec!");
-        _found = true;
         {
             deleteMarkerLocal _x;
         } forEach markers;
@@ -34,10 +33,21 @@ drawDirections = {
 
     _timeOut = {
         systemchat ("time out!");
-        _found = true;
         {
             deleteMarkerLocal _x;
         } forEach markers;
+    };
+
+    _analyzeRoad = {
+        params ["_road", "_roads"];
+        if (_roads isEqualTo []) exitWith {
+            _deadEnds pushBack _road;
+            markers pushBack ([_road, "ColorGrey"] call _createMarker);
+        };
+        if (count _roads > 1) exitWith {
+            markers pushBack ([_road, "ColorYellow"] call _createMarker);
+        };
+        markers pushBack (_road call _createMarker);
     };
 
     _processRoad = {
@@ -45,25 +55,27 @@ drawDirections = {
         _time = time;
         _path pushback _road;
         _checked pushBackUnique _road;
+        _apply = {};
 
-        markers pushBack (_road call _createMarker);
         if (_road isEqualTo _goal) exitWith {
             _this call _drawRoute;
         };
         if ((time - _startTime) > 5) exitWith {
             call _timeOut;
         };
+        if (_lazy) then {
+            _apply = {[(_x distance2D _goal), [_x, [] + _path]]};
+        } else {
+            _apply ={[(_x distance2D _goal) * (count ([] + _path)), [_x, [] + _path]]};
+        };
 
         _roads = roadsConnectedTo _road;
         _roads = _roads - _checked;
-        if (_lazy) then {
-            _queue append (_roads apply {[(_x distance2D _goal), [_x, [] + _path]]});
-        } else {
-            _queue append (_roads apply {[(_x distance2D _goal) * (count ([] + _path)), [_x, [] + _path]]});
-        };
+        [_road, _roads] call _analyzeRoad;
+        _queue append (_roads apply _apply);
         _queue sort true;
         _next = _queue deleteAt 0;
-        systemchat (str (count _checked) + ":" + str (count _roads) + " processed in " + str (time - _time) + "sec");
+        systemchat (str (count _checked) + ":" + str (count _queue) + " processed in " + str (time - _time) + "sec");
         (_next select 1) call _processRoad;
     };
 

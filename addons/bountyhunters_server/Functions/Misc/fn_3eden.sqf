@@ -21,7 +21,7 @@ onEachFrame {
                         case ((_desc find "a3\" == -1) && (_desc find ".p3d" != -1) && _desc find "replace:" == -1): {
                             _model = (str missionConfigFile select [0, count str missionConfigFile - 15]) + _desc;
                             allObjects pushBack _x;
-                            allSimpelObjects pushBack [_x, createSimpleObject [_model, getPosASL _x], _model];
+                            allSimpelObjects pushBack [_x, createSimpleObject [_model, getPosASL _x], _desc];
                         };
                         case (_desc find "hide:" != -1): {
                             _objId = parseNumber (_desc select [5]);
@@ -31,21 +31,23 @@ onEachFrame {
                             allObjects pushBack _x;
                         };
                         case (_desc find "replace:" != -1 && _desc find "|" != -1 && _desc find ".p3d" != -1): {
-                            comment "replace:b_vitis_vinifera_f|gta_cannabis.p3d";
+                            comment "replace:b_vitis_vinifera_f|Models\p_cannabis.p3d";
                             _args = _desc select [8];
                             _find = _args select [0, _args find "|"];
                             _replace = _args select [(_args find "|")+1];
                             _radius = (_x get3DENAttribute "placementRadius") select 0;
-                            if (_desc find "a3\" == -1) then {
-                                _replace = (str missionConfigFile select [0, count str missionConfigFile - 15]) + _replace;
-                            };
                             {
                                 if ((str _x) find _find != -1) then {
                                     _pos = (getPosATL _x);
                                     _vectorDir = (vectorDir _x);
                                     _vectorUp = (vectorUp _x);
                                     _x hideObject true;
-                                    _simpelObject = createSimpleObject [_replace, _pos];
+                                    _simpelObject = objNull;
+                                    if (_replace find "a3\" == -1) then {
+                                        _simpelObject = createSimpleObject [(str missionConfigFile select [0, count str missionConfigFile - 15]) + _replace, _pos];
+                                    } else {
+                                        _simpelObject = createSimpleObject [_replace, _pos];
+                                    };
                                     _simpelObject setPosATL _pos;
                                     _simpelObject setVectorDirAndUp [_vectorDir, _vectorUp];
                                 };
@@ -70,7 +72,13 @@ onEachFrame {
                         _vectorUp = (vectorUp _object);
                         _simpelObject setPosATL _pos;
                         _simpelObject setVectorDirAndUp [_vectorDir, _vectorUp];
-                        _object set3DENAttribute ["Init", ("if ((!isMultiplayer) || isServer) then {deleteVehicle this; _sObj = createSimpleObject ['" + _model + "', ATLToASL " + str _pos + "]; _sObj setVectorDirAndUp " + str [_vectorDir, _vectorUp] + "; _sObj setPosATL" + str _pos + "; };")]
+                        if (_model find "a3\" != -1) then {
+                            _object set3DENAttribute ["Init", ("if ((!isMultiplayer) || isServer) then {deleteVehicle this; _sObj = createSimpleObject ['" +
+                            _model + "', ATLToASL " + str _pos + "]; _sObj setVectorDirAndUp " + str [_vectorDir, _vectorUp] + "; _sObj setPosATL" + str _pos + "; };")]
+                        } else {
+                            _object set3DENAttribute ["Init", ("if ((!isMultiplayer) || isServer) then {deleteVehicle this; _sObj = createSimpleObject [(str missionConfigFile select [0, count str missionConfigFile - 15]) + '" +
+                            _model + "', ATLToASL " + str _pos + "]; _sObj setVectorDirAndUp " + str [_vectorDir, _vectorUp] + "; _sObj setPosATL" + str _pos + "; };")]
+                        };
                     };
                 } else {
                     allObjects deleteAt (allObjects find _object);
@@ -89,6 +97,25 @@ onEachFrame {
                 };
             };
             case (_x in allReplaceObjects): {
+                _x params ["_object", "_find", "_replace", "_radius", "_pos"];
+                _object set3DENAttribute ["Init", ("if ((!isMultiplayer) || isServer) then {deleteVehicle this; {" +
+                    "if ((str _x) find '" + _find + "' != -1) then {" +
+                        "_pos = (getPosATL _x);" +
+                        "_vectorDir = (vectorDir _x);" +
+                        "_vectorUp = (vectorUp _x);" +
+                        "hideObjectGlobal _x;" +
+                        "_simpelObject = objNull;" +
+                        (call {
+                            if (_replace find "a3\" == -1) then {
+                                "_simpelObject = createSimpleObject [(str missionConfigFile select [0, count str missionConfigFile - 15]) + '" + _replace + "', _pos];"
+                            } else {
+                                "_simpelObject = createSimpleObject ['" + _replace + "', _pos];"
+                            }
+                        }) +
+                        "_simpelObject setPosATL _pos;" +
+                        "_simpelObject setVectorDirAndUp [_vectorDir, _vectorUp];" +
+                    "};" +
+                "} forEach (nearestObjects [" + str _pos + ", [], " + str _radius + ", true]);};")];
             };
             default {};
         };

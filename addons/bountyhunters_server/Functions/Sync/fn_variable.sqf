@@ -16,6 +16,15 @@ _inidbi = ["new", getPlayerUID _clientObject] call OO_INIDBI;
                     _clientObject setUnitLoadout _val;
                     [missionNamespace, [_varName, _val]] remoteExecCall ["setVariable", _clientOwnerId];
                 };
+                case ("SpawnPosition"): {
+                    _clientObject setPos _val;
+                    [missionNamespace, [_varName, _val]] remoteExecCall ["setVariable", _clientOwnerId];
+                };
+                case ("SpawnRotation"): {
+                    _clientObject setDir _val;
+                    _clientObject setPos (getpos _clientObject);
+                    [missionNamespace, [_varName, _val]] remoteExecCall ["setVariable", _clientOwnerId];
+                };
                 default {
                     [missionNamespace, [_varName, _val]] remoteExecCall ["setVariable", _clientOwnerId];
                 };
@@ -27,6 +36,17 @@ _inidbi = ["new", getPlayerUID _clientObject] call OO_INIDBI;
                     case ("Gear"): {
                         _val = getUnitLoadout (configFile >> "CfgVehicles" >> (selectRandom _val));
                         _clientObject setUnitLoadout _val;
+                        ["write", ["stats", _varName, _val]] call _inidbi;
+                        [missionNamespace, [_varName, _val]] remoteExecCall ["setVariable", _clientOwnerId];
+                    };
+                    case ("SpawnPosition"): {
+                        _clientObject setPos _val;
+                        ["write", ["stats", _varName, _val]] call _inidbi;
+                        [missionNamespace, [_varName, _val]] remoteExecCall ["setVariable", _clientOwnerId];
+                    };
+                    case ("SpawnRotation"): {
+                        _clientObject setDir _val;
+                        _clientObject setPos (getpos _clientObject);
                         ["write", ["stats", _varName, _val]] call _inidbi;
                         [missionNamespace, [_varName, _val]] remoteExecCall ["setVariable", _clientOwnerId];
                     };
